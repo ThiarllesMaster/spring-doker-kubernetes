@@ -1,104 +1,204 @@
-Spring Compose – REST API with Docker and Kubernetes
-Overview
+📖 Overview
 
-This project consists of a REST API developed using Spring Boot for user management (CRUD operations).
+This project demonstrates the evolution of a Spring Boot REST API from a local containerized setup using Docker Compose to a Kubernetes-orchestrated architecture.
 
-The system was initially containerized using Docker Compose for local execution and later evolved into a Kubernetes-orchestrated architecture.
+The system provides CRUD operations for user management and showcases best practices in:
 
-The objective of this project is to demonstrate the evolution of a simple containerized application into a distributed and scalable solution ready for production environments.
+Containerization
 
-Architecture
+Environment-based configuration
 
-Application:
-- Spring Boot
-- Spring Data JPA
-- REST API
-- Profiles: dev and prod
+Infrastructure as Code
 
-Database:
-- MySQL
-- Persistent Volume in Kubernetes
+Kubernetes resource management
 
-Containerization:
-- Dockerfile for application build
-- Docker Compose for local environment
+Persistent storage handling
 
-Kubernetes Orchestration:
-- Deployment
-- Service
-- ConfigMap
-- Secret
-- Persistent Volume
+The main objective is to illustrate the transition from a development environment to a production-ready cloud-native architecture.
 
-Running with Docker Compose
+🏗 Architecture Overview
+Phase 1 – Docker Compose (Local Development)
+Client
+   ↓
+Spring Boot Container
+   ↓
+MySQL Container
 
-Build and start:
+
+Multi-container setup
+
+Internal Docker network
+
+Service dependency management
+
+Phase 2 – Kubernetes (Orchestrated Environment)
+Client
+   ↓
+Kubernetes Service
+   ↓
+Spring Boot Pod
+   ↓
+MySQL Service
+   ↓
+MySQL Pod
+   ↓
+Persistent Volume
+
+
+Implemented Kubernetes resources:
+
+Deployment
+
+Service
+
+ConfigMap
+
+Secret
+
+Persistent Volume
+
+🚀 Running the Project
+🐳 Running with Docker Compose
+1️⃣ Clone repository
+git clone https://github.com/ThiarllesMaster/spring-doker-kubernetes.git
+cd spring-doker-kubernetes
+
+2️⃣ Build and start containers
 docker-compose up --build
 
-Stop containers:
+3️⃣ Stop containers
 docker-compose down
 
-Kubernetes Deployment
 
-Create MySQL resources:
+The environment will start:
+
+Spring Boot API
+
+MySQL database
+
+Application available at:
+
+http://localhost:8080
+
+☸️ Deploying to Kubernetes
+Prerequisites
+
+Kubernetes cluster (Minikube, Kind, etc.)
+
+kubectl configured
+
+1️⃣ Deploy MySQL resources
 kubectl apply -f k8s/mysql/
 
-Create application resources:
+2️⃣ Deploy Application resources
 kubectl apply -f k8s/app/
 
-Verify resources:
+3️⃣ Verify resources
 kubectl get pods
 kubectl get services
 
-Environment Configuration
+⚙ Environment Configuration
 
-The project uses Spring profiles:
-- application.yml
-- application-dev.yml
-- application-prod.yml
+The application supports multiple Spring profiles:
 
-The active profile can be controlled via environment variable:
+application.yml
+
+application-dev.yml
+
+application-prod.yml
+
+The active profile can be defined using:
+
 SPRING_PROFILES_ACTIVE=dev
 
-In Kubernetes, this is configured through a ConfigMap.
 
-Project Structure
+In Kubernetes, this is configured using ConfigMap.
 
+Sensitive credentials are managed through Secrets.
+
+📡 API Endpoints
+Method	Endpoint	Description
+GET	/users	Retrieve all users
+GET	/users/{id}	Retrieve user by ID
+POST	/users	Create a new user
+PUT	/users/{id}	Update existing user
+DELETE	/users/{id}	Delete user
+📂 Project Structure
 src/
  ├── controller/
  ├── entity/
  ├── repository/
  └── resources/
 
-Main components:
-- UserController → REST endpoints
-- User → JPA entity
-- UserRepository → Persistence interface
+Core Components
 
-Implemented Best Practices
+UserController → REST endpoints
 
-- Environment-based configuration separation
-- Use of Secrets for credentials
-- Persistent storage for database
-- Infrastructure as Code (Kubernetes YAML)
-- Architecture prepared for scalability
+User → JPA entity
 
-Lessons Learned
+UserRepository → Data persistence layer
 
-- Differences between local and cluster environments
-- Externalized configuration with ConfigMap
-- Secure credential management
-- Persistence in containerized environments
-- Declarative deployment with Kubernetes
+🛠 Technologies Used
 
-Technologies Used
+Java
 
-- Java
-- Spring Boot
-- Spring Data JPA
-- MySQL
-- Docker
-- Docker Compose
-- Kubernetes
-- Maven
+Spring Boot
 
+Spring Data JPA
+
+MySQL
+
+Docker
+
+Docker Compose
+
+Kubernetes
+
+Maven
+
+🧠 Architectural Decisions
+
+Spring Boot chosen for rapid REST API development
+
+Docker Compose used for local multi-container setup
+
+Kubernetes introduced for scalability and orchestration
+
+ConfigMap & Secrets used for externalized configuration
+
+Persistent Volume implemented to prevent data loss
+
+Stateless application design for horizontal scalability
+
+🔭 Future Improvements
+
+Add Kubernetes Liveness and Readiness Probes
+
+Implement Horizontal Pod Autoscaler (HPA)
+
+Add CI/CD pipeline (GitHub Actions)
+
+Implement automated integration tests
+
+Introduce Helm charts
+
+Add monitoring (Prometheus + Grafana)
+
+📈 What This Project Demonstrates
+
+Understanding of containerized environments
+
+Evolution from local to orchestrated architecture
+
+Infrastructure as Code principles
+
+Kubernetes resource management
+
+Secure configuration handling
+
+Backend development with persistence layer
+
+👨‍💻 Author
+
+Developed by Thiarlle Gomes
+Backend Developer | Cloud-Oriented Engineer
