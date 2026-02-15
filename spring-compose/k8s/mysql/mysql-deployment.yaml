@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1                       # Apenas 1 Pod MySQL rodando
+  selector:
+    matchLabels:
+      app: mysql                    # Seleciona Pods com label "app: mysql"
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306   # Porta do MySQL dentro do Pod
+
+          # 1️⃣ Montando o PVC para persistência de dados eu preciso de volumes + volumeMounts
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql   # Local dentro do container
+
+          # 2️⃣ ConfigMap como variáveis de ambiente
+          envFrom:
+            - configMapRef:
+                name: mysql-config      # Todas as chaves do ConfigMap viram variáveis
+
+          # 3️⃣ Secret como variáveis de ambiente (senhas)
+          env:
+            - name: MYSQL_ROOT_HOST
+              value: "%"
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+
+      # 4️⃣ Declarando volumes utilizados pelo Pod
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc         # PVC previamente criado

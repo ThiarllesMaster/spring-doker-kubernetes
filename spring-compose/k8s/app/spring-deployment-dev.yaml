@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-app-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-app-dev
+  template:
+    metadata:
+      labels:
+        app: spring-app-dev
+    spec:
+      containers:
+        - name: spring-app
+          image: spring-app:1.0        # tua imagem local
+          ports:
+            - containerPort: 8080
+          env:
+            # Profile ativo
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config-dev
+                  key: SPRING_PROFILES_ACTIVE #use the key defined at configMap dev
+
+            # URL do banco
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-config-dev
+                  key: SPRING_DATASOURCE_URL
+
+            # Credenciais do MySQL (usando Secret existente)
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD

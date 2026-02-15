@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-config-dev
+data:
+  SPRING_PROFILES_ACTIVE: dev
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appdb

@@ -1,0 +1,31 @@
+# mysql-volume-clean.yaml
+
+# 1️⃣ PersistentVolume (PV)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce          # Apenas 1 Pod/Node pode escrever
+  hostPath:                  # Para Minikube/local
+    path: /mnt/data/mysql
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+
+---
+
+# 2️⃣ PersistentVolumeClaim (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: mysql-pv      # Ligação explícita ao PV criado

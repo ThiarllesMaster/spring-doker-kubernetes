@@ -1,0 +1,10 @@
+apiVersion: v1
+#Here I'm saying to the Kubernetes this is one object configMap
+kind: ConfigMap
+metadata:
+#name of configMap after it will be used at Deployment
+  name: mysql-config
+data:
+#Variables whose it will be used after in the deployment by envFrom
+  MYSQL_DATABASE: appdb
+  MYSQL_USER: appuser
